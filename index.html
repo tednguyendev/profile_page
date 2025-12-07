@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Ted Nguyen - Software developer who values pragmatism, minimalism, and efficiency.">
+<title>ted nguyen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #111; --term-bg: #202028; --border: #555; --text: #eee;
+    --accent: #66db82; --gold: #f0e68c; --dim: #888;
+    --font: 'Space Mono', monospace;
+  }
+    
+  body {
+    background: var(--bg); color: var(--text); font-family: var(--font); font-size: 16px;
+    margin: 0; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden;
+  }
+
+  /* --- UTILS & SCROLLBAR --- */
+  ::-webkit-scrollbar { width: 12px; background: var(--term-bg); border-left: 1px solid #333; }
+  ::-webkit-scrollbar-thumb { background: #333; border: 1px solid var(--dim); box-shadow: inset 1px 1px 0 rgba(255,255,255,0.1); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); border-color: #fff; }
+
+  /* --- OVERLAY --- */
+  #overlay { position: fixed; inset: 0; background: #000; display: flex; align-items: center; justify-content: center; z-index: 999; cursor: pointer; }
+  .boot-btn { 
+    padding: 15px 30px; font-size: 18px; font-weight: bold; font-family: var(--font);
+    background: transparent; color: var(--accent); border: 2px solid var(--accent); cursor: pointer; transition: 0.2s; 
+  }
+  .boot-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 15px var(--accent); }
+
+  /* --- TERMINAL CONTAINER --- */
+  #terminal {
+    width: 650px; max-width: 95%; max-height: 85vh;
+    background: var(--term-bg); border: 2px solid var(--border); box-shadow: 10px 10px 0 #000;
+    display: none; flex-direction: column; padding: 30px; position: relative; box-sizing: border-box; transition: height 0.3s ease;
+  }
+    
+  /* --- HEADER --- */
+  .header { border-bottom: 2px dashed var(--border); padding-bottom: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+  .header h1 { margin: 0; font-size: 20px; color: var(--accent); text-transform: lowercase; }
+  .meta { font-size: 14px; color: var(--dim); font-weight: bold; }
+  .meta span { transition: color 0.3s ease; }
+  .meta .active { color: var(--accent); text-shadow: 0 0 8px rgba(102, 219, 130, 0.4); }
+
+  /* --- CONTENT AREA --- */
+  #content { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; padding-bottom: 10px; padding-right: 10px; }
+  .centered { justify-content: center; }
+    
+  .title { color: var(--gold); font-size: 18px; font-weight: bold; text-transform: lowercase; margin-bottom: 5px; display: block; }
+  .desc { font-size: 15px; line-height: 1.6; color: #ccc; white-space: pre-wrap; margin-bottom: 5px; }
+  .cursor::after { content: '█'; color: var(--accent); animation: blink 1s infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* --- LIST ITEMS --- */
+  .list { list-style: none; padding: 0; margin: 0 0 10px 0; }
+  .item {
+    border: 1px solid #333; background: rgba(0,0,0,0.2); padding: 10px 12px; margin-bottom: 8px;
+    position: relative; cursor: pointer; opacity: 0; transition: border 0.1s, background 0.1s; 
+    border-left: 4px solid #333; padding-right: 120px; 
+  }
+  /* Animation */
+  .reveal .item { animation: slideIn 0.4s ease forwards; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    
+  /* Item States */
+  .item:hover { background: rgba(255,255,255,0.05); }
+  .item.active { border-color: var(--accent); background: rgba(102, 219, 130, 0.1); border-left-color: var(--accent); }
+  .item:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
+    
+  .item-head { color: #fff; font-weight: bold; display: block; margin-bottom: 2px; }
+  .item-sub { font-size: 12px; color: var(--dim); display: block; }
+  .item-hint { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); font-size: 10px; color: #444; transition: color 0.2s; }
+  .item.active .item-hint { color: var(--accent); }
+
+  /* --- ACTIONS --- */
+  .action-btn { 
+    color: var(--accent); font-weight: bold; margin-top: 10px; padding: 10px; font-size: 14px;
+    border: 1px dashed var(--accent); text-align: center; cursor: pointer; 
+    opacity: 0; visibility: hidden; transition: opacity 0.8s ease; 
+  }
+  .action-btn:hover { background: rgba(102, 219, 130, 0.1); }
+  .show { opacity: 1; visibility: visible; }
+  .bottom-text { opacity: 0; transition: opacity 1s 0.5s; }
+
+  /* --- FOOTER / CONTROLS --- */
+  .footer { border-top: 2px dashed var(--border); padding-top: 15px; margin-top: 15px; flex-shrink: 0; display: flex; flex-direction: column; gap: 15px; }
+  .nav { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; width: 100%; }
+    
+  /* Buttons - Exact Original Style */
+  .nav-btn {
+    background: transparent; border: 2px solid var(--accent); color: var(--accent);
+    padding: 8px 15px; font-family: var(--font); cursor: pointer; font-size: 13px; font-weight: bold;
+    min-width: 90px; transition: 0.2s;
+  }
+  .nav-btn:hover:not(:disabled) { background: var(--accent); color: #000; box-shadow: 0 0 10px var(--accent); }
+  .nav-btn:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; border-color: var(--dim); color: var(--dim); }
+
+  /* Fix button expansion */
+  #btn-prev { justify-self: start; }
+  #btn-next { justify-self: end; }
+  #progress { font-size: 12px; color: var(--dim); justify-self: center; }
+
+  /* Key Hints */
+  .hints { display: flex; justify-content: center; align-items: center; gap: 15px; color: var(--dim); opacity: 0.7; font-size: 10px; }
+  .key { background: #333; color: #fff; padding: 2px 6px; border-radius: 3px; line-height: 1; display: inline-block; margin-right: 4px;}
+    
+  /* --- MODAL --- */
+  #modal {
+    display: none; flex-direction: column; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 85%; max-height: 75vh; background: #000; border: 2px solid var(--gold); 
+    z-index: 1000; box-shadow: 20px 20px 0 rgba(0,0,0,0.5); overflow: hidden;
+  }
+  #modal-body { padding: 0 25px 15px; overflow-y: auto; color: #ccc; font-size: 14px; line-height: 1.6; flex-grow: 1; }
+  #modal-body a { color: var(--accent); text-decoration: none; }
+  #modal-body a:hover { text-decoration: underline; }
+    
+  /* Inline bold fix */
+  #modal-body strong { color: #fff; font-weight: bold; }
+  #modal-body ul { padding-left: 20px; margin: 0 0 15px 0; }
+  #modal-body li { margin-bottom: 5px; }
+
+  .modal-head { 
+    color: var(--gold); font-size: 18px; font-weight: bold; margin: 25px 25px 15px 25px; 
+    border-bottom: 1px dashed #444; padding-bottom: 10px; padding-right: 30px; flex-shrink: 0;
+  }
+  .modal-foot { 
+    font-size: 10px; color: #555; background: #000; border-top: 1px solid #222; 
+    padding: 15px 25px; display: flex; justify-content: flex-end; gap: 15px; flex-shrink: 0;
+  }
+  .link-hover { cursor: pointer; transition: 0.2s; }
+  .link-hover:hover { color: #fff; text-decoration: underline; }
+  .close-x { position: absolute; top: 15px; right: 15px; font-weight: bold; cursor: pointer; color: var(--dim); font-size: 16px; background: #000; padding: 2px; z-index: 1002; }
+  .close-x:hover { color: var(--accent); }
+  .close-x:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  @media (max-width: 600px) { .hints, .item-hint { display: none; } .item { padding-right: 12px; } .nav-btn { min-width: 80px; padding: 10px; } }
+</style>
+</head>
+<body>
+
+<div id="overlay" onclick="app.boot()">
+  <div style="text-align:center;"><button class="boot-btn">[ enter ]</button></div>
+</div>
+
+<div id="terminal">
+  <div class="header">
+    <div class="user-id"><h1>ted nguyen</h1></div>
+    <div class="meta" id="meta-nav">
+      <span data-id="1">build</span>/<span data-id="2">write</span>/<span data-id="3">read</span>/<span data-id="4">optimize</span>
+    </div>
+  </div>
+
+  <div id="content"></div>
+
+  <div class="footer">
+    <div class="nav">
+      <button id="btn-prev" class="nav-btn" onclick="app.nav(-1)">&lt; exit os</button>
+      <span id="progress">1 / 4</span>
+      <button id="btn-next" class="nav-btn" onclick="app.nav(1)">next &gt;</button>
+    </div>
+    <div class="hints">
+      <span><span class="key">h</span>prev</span>
+      <span><span class="key">l</span>next</span>
+      <span><span class="key">j</span>down</span>
+      <span><span class="key">k</span>up</span>
+    </div>
+  </div>
+
+  <div id="modal">
+    <div class="close-x" onclick="app.toggleModal()" role="button" aria-label="Close modal">[x]</div>
+    <div class="modal-head" id="m-title"></div>
+    <div id="modal-body"></div>
+    <div class="modal-foot" id="m-foot"></div>
+  </div>
+</div>
+
+<script>
+const data = [
+  {
+    desc: `hi, i am ted, currently a software developer.
+
+i prefer:
+<span style="color:var(--accent)">></span> <b>done</b> over perfection
+<span style="color:var(--accent)">></span> <b>pragmatism</b> over idealism
+<span style="color:var(--accent)">></span> <b>minimalism</b> over maximalism
+<span style="color:var(--accent)">></span> <b>evidence</b> over intuition
+<span style="color:var(--accent)">></span> <b>convention</b> over configuration`,
+    items: []
+  },
+  { title: "build", desc: "i love building things, those that help, even just a little.", items: [], link: "https://github.com/tednguyendev" },
+  { title: "write", desc: "i also write, mostly about thinking, human connections, efficiency, and rationality.", items: [], link: "https://tednguyen.substack.com/" },
+  {
+    title: "read",
+    desc: `there is no other form of knowledge consumption offers the same combination of freedom, density, depth, and tranquility like reading.
+
+the following are those i read the most from.`,
+    items: [
+      { title: "Tim Urban", detail: "my most fav writer. he writes (and draws stick humans) about, well, everything.", link: "https://waitbutwhy.com" },
+      { title: "Paul Graham", detail: "he writes about writing, thinking, and building. his writings never fail to inspire me to make something great, even just for myself.", link: "https://www.paulgraham.com/articles.html" },
+      { title: "Scott Alexander", detail: "i discovered scott alexander through less wrong, a rationality community. i then found myself reading everything else he writes.", link: "https://www.astralcodexten.com" },
+      { title: "DHH and Jason Fried", detail: "the two founders of 37signals have a lot of opinions on a lot of things, and i like to observe those who have opinions and fight for them, rather than those who don't.", link: "https://37signals.com/" },
+      { title: "Nassim Taleb", detail: "he wrote the incerto, which covers a lot of unique interesting topics.", link: "https://x.com/nntaleb" },
+      { title: "Ted Chiang", detail: "my most fav sci-fi writer. his sci-fi doesn't feel far-fetched. it feels close. it makes you think a lot, while still being enjoyable.", link: "https://www.goodreads.com/author/list/130698.Ted_Chiang" },
+      { title: "Haruki Murakami", detail: "his stories feel so real, yet so dreamy. i do not even understand 20% what he writes, yet his writings are the best page turners.", link: "https://www.goodreads.com/author/list/3354.Haruki_Murakami" }
+    ]
+  },
+  {
+    title: "optimize",
+    desc: "i optimize, well, everything. whether it is build/write/read/code/note, if it is useful or fun to make it better, i can't stop myself.\n\nbut not everything can be optimized. most of the stuff just does not have enough depth to go further into.\n\nbelow are those that do have, which i use daily. it is rare to talk to me and not hear i mention them.",
+    bottomText: "whenever i try to convince people to use these tools, the most common excuse is that these look trivial, unserious, and too toyish.\n\ni used to think the same, but it turned out to be the opposite: the small things, because they are little, they are everywhere in our lives, which means if we can make them just a little more efficient or fun, the impact is going to be exponential.",
+    items: [
+      {
+        title: "neovim",
+        detail: `<span style='color:var(--accent); font-weight:bold'>nvim</span> is a high performance Vim-based text editor that uses no mouse - all keyboard interaction
+<br><br>
+<strong>pros:</strong>
+<ul>
+  <li>keyboard is <strong>faster</strong> and more <strong>comfortable</strong> than mouse</li>
+  <li>everything, really, <strong>everything is customizable</strong></li>
+  <li>makes you look <strong>cool</strong> af</li>
+  <li>super <strong>efficient</strong> and more importantly: <strong>brings joy</strong></li>
+</ul>
+<strong>cons:</strong>
+<ul><li>the learning curve is high</li></ul>
+i take notes, write, code, and do everything text-based with <span style='color:var(--accent); font-weight:bold'>nvim</span>. it makes me edit text at least <strong>20%</strong> faster.
+<br><br>
+given that your career will contain around <strong>80,000</strong> hours, even if <span style='color:var(--accent); font-weight:bold'>nvim</span> only makes you <strong>1%</strong> faster, that is still <strong>800</strong> hours.
+<br><br>
+that is not to mention the time you will still use text outside of work (side projects, writing blogs) and the time you will still use a keyboard after retirement, which means you can use <span style='color:var(--accent); font-weight:bold'>nvim</span> up to <strong>150,000</strong> hours.
+<br><br>
+it is nearly <strong>impossible</strong> to use <span style='color:var(--accent); font-weight:bold'>nvim</span> and have it turn out to be not worth it.`,
+        link: "https://neovim.io/"
+      },
+      {
+        title: "split keyboards",
+        detail: `
+<span style='color:#bb86fc; font-weight:bold'>split keyboards</span> are keyboards that are... well, split in half, with the focus being ergonomics
+<br><br>
+<strong>pros:</strong>
+<ul>
+  <li><strong>your shoulders</strong> will thank you</li>
+  <li><strong>your hands</strong> move less, because the keys are placed/can be customized to be more efficient, which brings so much satisfaction</li>
+  <li><strong>your thumbs</strong> are utilized more, with 3 or 4 keys for each thumb, instead of both thumbs just for the command key and the space key</li>
+  <li>it is <strong>better for 10-finger typing</strong>, because it uses ortholinear layout</li>
+  <li>it is <strong>portable</strong></li>
+  <li>you can put <strong>the coffee</strong> in between the 2 halves</li>
+</ul>
+<strong>cons:</strong>
+<ul><li>it also takes time to learn, although a lot less than <span style='color:var(--accent); font-weight:bold'>nvim</span></li></ul>
+<br>my wpm after a year increased from <strong>100</strong> to <strong>120</strong>, pretty worth it, given we type a lot.
+`,
+        link: "https://github.com/foostan/crkbd"
+      },
+    ]
+  },
+  {
+    title: "get in touch", desc: "send me a message on email or linkedin.",
+    items: [
+      { title: 'email', detail: '<a href="mailto:tednguyen.dev@gmail.com">tednguyen.dev@gmail.com</a>', link: "mailto:tednguyen.dev@gmail.com" },
+      { title: 'linkedin', detail: '<a href="https://www.linkedin.com/in/ted-nguyen-90a825225" target="_blank">linkedin.com/in/ted-nguyen-90a825225</a>', link: "https://www.linkedin.com/in/ted-nguyen-90a825225" }
+    ]
+  }
+];
+
+class TerminalApp {
+  constructor() {
+    this.idx = 0; this.selIdx = 0; this.isModal = false; this.timer = null;
+    this.els = {
+      term: document.getElementById('terminal'), overlay: document.getElementById('overlay'), content: document.getElementById('content'),
+      meta: document.getElementById('meta-nav'), modal: document.getElementById('modal'), mBody: document.getElementById('modal-body'),
+      mTitle: document.getElementById('m-title'), mFoot: document.getElementById('m-foot'), prev: document.getElementById('btn-prev'),
+      next: document.getElementById('btn-next'), prog: document.getElementById('progress')
+    };
+    document.addEventListener('keydown', this.handleKey.bind(this));
+    if (localStorage.getItem('booted')) this.boot();
+  }
+
+  boot() {
+    localStorage.setItem('booted', 'true'); this.els.overlay.style.display = 'none'; this.els.term.style.display = 'flex'; this.render();
+  }
+
+  shutdown() {
+    localStorage.removeItem('booted'); this.els.term.style.display = 'none'; this.els.overlay.style.display = 'flex'; this.idx = 0;
+  }
+
+  nav(dir) {
+    if (this.idx === 0 && dir === -1) return this.shutdown();
+    const next = this.idx + dir;
+    if (next >= 0 && next < data.length) { this.idx = next; this.selIdx = 0; this.render(); }
+  }
+
+  render() {
+    clearTimeout(this.timer);
+    const pg = data[this.idx];
+    this.els.content.scrollTop = 0;
+    this.els.content.className = pg.items.length ? '' : 'centered';
+
+    // Header Highlight
+    Array.from(this.els.meta.children).forEach((span, i) => {
+      span.className = (i + 1 === this.idx || this.idx === 5) ? 'active' : '';
+    });
+
+    const listHtml = pg.items.length ? `<ul id="list" class="list">${this.genItems(pg.items)}</ul>` : '';
+    const btnHtml = pg.link ? `<div id="act-btn" class="action-btn" onclick="app.openLink('${pg.link}')">>> press [enter] to open <<</div>` : '';
+    const bottomHtml = pg.bottomText ? `<div id="btm-txt" class="desc bottom-text">${pg.bottomText}</div>` : '';
+
+    this.els.content.innerHTML = `${pg.title ? `<span class="title">${pg.title}</span>` : ''}<div id="type-area" class="desc"></div>${listHtml}${bottomHtml}${btnHtml}`;
+
+    this.typeText(pg.desc, document.getElementById('type-area'), () => {
+      if (pg.items.length) { 
+        document.getElementById('list').classList.add('reveal');
+        
+        // --- SCROLL FIX START ---
+        // For "read" (3) and "optimize" (4), scroll only 40px instead of jumping to the first item
+        if (this.idx === 3 || this.idx === 4) {
+          setTimeout(() => this.els.content.scrollBy({ top: 52, behavior: 'smooth' }), 100);
+        } else {
+          setTimeout(() => this.scrollToSel(), 100);
+        }
+        // --- SCROLL FIX END ---
+      }
+      if (document.getElementById('act-btn')) document.getElementById('act-btn').classList.add('show');
+      if (document.getElementById('btm-txt')) document.getElementById('btm-txt').style.opacity = 1;
+    });
+
+    this.els.prog.innerText = `${this.idx + 1} / ${data.length}`;
+    this.els.prev.innerText = this.idx === 0 ? "< exit os" : "< prev";
+    this.els.next.style.visibility = (this.idx === data.length - 1) ? 'hidden' : 'visible';
+  }
+
+  genItems(items) {
+    return items.map((it, i) => `
+      <li id="it-${i}" class="item ${i === 0 ? 'active' : ''}" style="animation-delay:${i * 0.15}s" onclick="app.clickItem(${i})">
+        <span class="item-hint">[space] to view</span>
+        <span class="item-head">${it.title}</span>
+        ${it.sub ? `<span class="item-sub">${it.sub}</span>` : ''}
+      </li>
+    `).join('');
+  }
+
+  typeText(txt, el, cb, i = 0) {
+    if (!el) return;
+    el.classList.add('cursor');
+    const step = () => {
+      if (i < txt.length) {
+        if (txt[i] === '<') i = txt.indexOf('>', i); // skip tags
+        el.innerHTML = txt.substring(0, i + 1);
+        i++;
+        if (!data[this.idx].items.length) this.els.content.scrollTop = this.els.content.scrollHeight;
+        this.timer = setTimeout(step, 5);
+      } else {
+        el.classList.remove('cursor'); if (cb) cb();
+      }
+    };
+    step();
+  }
+
+  clickItem(i) { this.selIdx = i; this.updateSel(); this.toggleModal(); }
+
+  updateSel() {
+    document.querySelectorAll('.item').forEach(el => el.classList.remove('active'));
+    const el = document.getElementById(`it-${this.selIdx}`);
+    if (el) { el.classList.add('active'); this.scrollToSel(); }
+  }
+
+  scrollToSel() {
+    const el = document.getElementById(`it-${this.selIdx}`);
+    if (!el) return;
+    const target = el.offsetTop + el.offsetHeight - this.els.content.clientHeight + 20;
+    this.els.content.scrollTo({ top: Math.max(0, target), behavior: 'smooth' });
+  }
+
+  toggleModal() {
+    if (this.isModal) {
+      this.els.modal.style.display = 'none'; this.isModal = false;
+    } else if (data[this.idx].items.length) {
+      const it = data[this.idx].items[this.selIdx];
+      this.els.mTitle.innerHTML = it.title;
+      this.els.mBody.innerHTML = it.detail || "No details.";
+      this.els.mFoot.innerHTML = `
+        ${it.link ? `<span class="link-hover" style="color:var(--accent); font-weight:bold" onclick="app.openLink('${it.link}')">[enter] open link</span>` : ''}
+        <span class="link-hover" onclick="app.toggleModal()">[space] close</span>
+      `;
+      this.els.mBody.scrollTop = 0;
+      this.els.modal.style.display = 'flex'; this.isModal = true;
+    }
+  }
+
+  openLink(url) { if (url) window.open(url, '_blank'); }
+
+  handleKey(e) {
+    if (this.els.term.style.display !== 'flex') { if (e.key === 'Enter') this.boot(); return; }
+    const k = e.key.toLowerCase();
+      
+    if (this.isModal) {
+      if (k === 'escape' || k === ' ' || k === 'q') { e.preventDefault(); this.toggleModal(); }
+      else if (k === 'enter') { const link = data[this.idx].items[this.selIdx]?.link; if(link) this.openLink(link); }
+      else if (['j', 'arrowdown'].includes(k)) this.els.mBody.scrollBy({ top: 50, behavior: 'smooth' });
+      else if (['k', 'arrowup'].includes(k)) this.els.mBody.scrollBy({ top: -50, behavior: 'smooth' });
+      return;
+    }
+
+    if (['arrowleft', 'h'].includes(k)) this.nav(-1);
+    else if (['arrowright', 'l'].includes(k)) this.nav(1);
+    else if (['j', 'arrowdown'].includes(k)) this.moveCursor(1);
+    else if (['k', 'arrowup'].includes(k)) this.moveCursor(-1);
+    else if (k === ' ' || k === 'enter') {
+      e.preventDefault();
+      data[this.idx].items.length ? this.toggleModal() : this.openLink(data[this.idx].link);
+    }
+  }
+
+  moveCursor(dir) {
+    const items = data[this.idx].items;
+    if (items.length) {
+      if (dir === 1 && this.selIdx < items.length - 1) { this.selIdx++; this.updateSel(); }
+      else if (dir === -1 && this.selIdx > 0) { this.selIdx--; this.updateSel(); }
+      else this.els.content.scrollBy({ top: dir * 50, behavior: 'smooth' });
+    } else {
+      this.els.content.scrollBy({ top: dir * 50, behavior: 'smooth' });
+    }
+  }
+}
+
+const app = new TerminalApp();
+</script>
+</body>
+</html>
