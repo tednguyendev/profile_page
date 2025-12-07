@@ -4,7 +4,13 @@
       "Bash(find:*)",
       "Bash(open /Users/nguyenvu/projects/profile_page/index.html)",
       "Bash(dig:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(git remote add:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)",
+      "Bash(git remote set-url:*)",
+      "Bash(sips:*)",
+      "Bash(convert:*)"
     ],
     "deny": [],
     "ask": []
