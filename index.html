@@ -26,14 +26,6 @@
   ::-webkit-scrollbar-thumb { background: #333; border: 1px solid var(--dim); box-shadow: inset 1px 1px 0 rgba(255,255,255,0.1); }
   ::-webkit-scrollbar-thumb:hover { background: var(--accent); border-color: #fff; }
 
-  /* --- OVERLAY --- */
-  #overlay { position: fixed; inset: 0; background: #000; display: flex; align-items: center; justify-content: center; z-index: 999; cursor: pointer; }
-  .boot-btn { 
-    padding: 15px 30px; font-size: 18px; font-weight: bold; font-family: var(--font);
-    background: transparent; color: var(--accent); border: 2px solid var(--accent); cursor: pointer; transition: 0.2s; 
-  }
-  .boot-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 15px var(--accent); }
-
   /* --- TERMINAL CONTAINER --- */
   #terminal {
     width: 650px; max-width: 95%; max-height: 85vh;
@@ -42,9 +34,9 @@
   }
     
   /* --- HEADER --- */
-  .header { border-bottom: 2px dashed var(--border); padding-bottom: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
-  .header h1 { margin: 0; font-size: 20px; color: var(--accent); text-transform: lowercase; }
-  .meta { font-size: 14px; color: var(--dim); font-weight: bold; }
+  .header { border-bottom: 2px dashed var(--border); padding-bottom: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: baseline; flex-shrink: 0; }
+  .header h1 { margin: 0; font-size: 20px; color: var(--accent); text-transform: lowercase; line-height: 1; }
+  .meta { font-size: 14px; color: var(--dim); font-weight: bold; line-height: 1; }
   .meta span { transition: color 0.3s ease; }
   .meta .active { color: var(--accent); text-shadow: 0 0 8px rgba(102, 219, 130, 0.4); }
 
@@ -145,11 +137,7 @@
 </head>
 <body>
 
-<div id="overlay" onclick="app.boot()">
-  <div style="text-align:center;"><button class="boot-btn">[ enter ]</button></div>
-</div>
-
-<div id="terminal">
+<div id="terminal" style="display: flex;">
   <div class="header">
     <div class="user-id"><h1>ted nguyen</h1></div>
     <div class="meta" id="meta-nav">
@@ -161,7 +149,7 @@
 
   <div class="footer">
     <div class="nav">
-      <button id="btn-prev" class="nav-btn" onclick="app.nav(-1)">&lt; exit os</button>
+      <button id="btn-prev" class="nav-btn" onclick="app.nav(-1)">&lt; prev</button>
       <span id="progress">1 / 4</span>
       <button id="btn-next" class="nav-btn" onclick="app.nav(1)">next &gt;</button>
     </div>
@@ -273,25 +261,16 @@ class TerminalApp {
   constructor() {
     this.idx = 0; this.selIdx = 0; this.isModal = false; this.timer = null;
     this.els = {
-      term: document.getElementById('terminal'), overlay: document.getElementById('overlay'), content: document.getElementById('content'),
+      term: document.getElementById('terminal'), content: document.getElementById('content'),
       meta: document.getElementById('meta-nav'), modal: document.getElementById('modal'), mBody: document.getElementById('modal-body'),
       mTitle: document.getElementById('m-title'), mFoot: document.getElementById('m-foot'), prev: document.getElementById('btn-prev'),
       next: document.getElementById('btn-next'), prog: document.getElementById('progress')
     };
     document.addEventListener('keydown', this.handleKey.bind(this));
-    if (localStorage.getItem('booted')) this.boot();
-  }
-
-  boot() {
-    localStorage.setItem('booted', 'true'); this.els.overlay.style.display = 'none'; this.els.term.style.display = 'flex'; this.render();
-  }
-
-  shutdown() {
-    localStorage.removeItem('booted'); this.els.term.style.display = 'none'; this.els.overlay.style.display = 'flex'; this.idx = 0;
+    this.render();
   }
 
   nav(dir) {
-    if (this.idx === 0 && dir === -1) return this.shutdown();
     const next = this.idx + dir;
     if (next >= 0 && next < data.length) { this.idx = next; this.selIdx = 0; this.render(); }
   }
@@ -331,7 +310,8 @@ class TerminalApp {
     });
 
     this.els.prog.innerText = `${this.idx + 1} / ${data.length}`;
-    this.els.prev.innerText = this.idx === 0 ? "< exit os" : "< prev";
+    this.els.prev.innerText = "< prev";
+    this.els.prev.disabled = this.idx === 0;
     this.els.next.style.visibility = (this.idx === data.length - 1) ? 'hidden' : 'visible';
   }
 
@@ -396,7 +376,6 @@ class TerminalApp {
   openLink(url) { if (url) window.open(url, '_blank'); }
 
   handleKey(e) {
-    if (this.els.term.style.display !== 'flex') { if (e.key === 'Enter') this.boot(); return; }
     const k = e.key.toLowerCase();
       
     if (this.isModal) {
