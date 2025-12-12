@@ -79,13 +79,13 @@
   .item.active .item-hint { color: var(--accent); }
 
   /* --- ACTIONS --- */
-  .action-btn { 
+  .action-btn {
     color: var(--accent); font-weight: bold; margin-top: 10px; padding: 10px; font-size: 14px;
-    border: 1px dashed var(--accent); text-align: center; cursor: pointer; 
-    opacity: 0; visibility: hidden; transition: opacity 0.8s ease; 
+    border: 1px dashed var(--accent); text-align: center; cursor: pointer;
+    opacity: 0; pointer-events: none; transition: opacity 0.8s ease;
   }
   .action-btn:hover { background: rgba(102, 219, 130, 0.1); }
-  .show { opacity: 1; visibility: visible; }
+  .show { opacity: 1; pointer-events: auto; }
   .bottom-text { opacity: 0; transition: opacity 1s 0.5s; }
 
   /* --- FOOTER / CONTROLS --- */
