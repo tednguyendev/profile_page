@@ -288,6 +288,7 @@ class TerminalApp {
     if (pageIdx === -1 && pageName === 'contact') pageIdx = data.findIndex(p => p.title === 'get in touch');
     if (pageIdx === -1) return false;
     this.idx = pageIdx;
+    const openModal = !!item;
     if (item) {
       const itemIdx = data[pageIdx].items.findIndex(it =>
         it.title.toLowerCase().replace(/\s+/g, '-') === item.toLowerCase()
@@ -296,7 +297,7 @@ class TerminalApp {
     } else {
       this.selIdx = 0;
     }
-    this.render();
+    this.render(() => { if (openModal && data[this.idx].items.length) this.toggleModal(); });
     return true;
   }
 
@@ -315,7 +316,7 @@ class TerminalApp {
     if (next >= 0 && next < data.length) { this.idx = next; this.selIdx = 0; this.render(); this.updateHash(); }
   }
 
-  render() {
+  render(cb) {
     clearTimeout(this.timer);
     const pg = data[this.idx];
     this.els.content.scrollTop = 0;
@@ -348,6 +349,7 @@ class TerminalApp {
       if (document.getElementById('act-btn')) document.getElementById('act-btn').classList.add('show');
       if (document.getElementById('btm-txt')) document.getElementById('btm-txt').style.opacity = 1;
       this.updateHash();
+      if (cb) cb();
     });
 
     this.els.prog.innerText = `${this.idx + 1} / ${data.length}`;
