@@ -358,7 +358,7 @@ class TerminalApp {
 
   genItems(items) {
     return items.map((it, i) => `
-      <li id="it-${i}" class="item ${i === 0 ? 'active' : ''}" style="animation-delay:${i * 0.15}s" onclick="app.clickItem(${i})">
+      <li id="it-${i}" class="item ${i === this.selIdx ? 'active' : ''}" style="animation-delay:${i * 0.15}s" onclick="app.clickItem(${i})">
         <span class="item-hint">[space] to view</span>
         <span class="item-head">${it.title}</span>
         ${it.sub ? `<span class="item-sub">${it.sub}</span>` : ''}
