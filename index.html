@@ -275,12 +275,44 @@ class TerminalApp {
       next: document.getElementById('btn-next'), prog: document.getElementById('progress')
     };
     document.addEventListener('keydown', this.handleKey.bind(this));
+    window.addEventListener('hashchange', () => this.handleHash());
+    this.handleHash() || this.render();
+  }
+
+  handleHash() {
+    const hash = decodeURIComponent(window.location.hash.slice(1));
+    if (!hash) return false;
+    const [page, item] = hash.split('/');
+    const pageName = page.toLowerCase().replace(/-/g, ' ');
+    let pageIdx = data.findIndex(p => p.title && p.title.toLowerCase() === pageName);
+    if (pageIdx === -1 && pageName === 'contact') pageIdx = data.findIndex(p => p.title === 'get in touch');
+    if (pageIdx === -1) return false;
+    this.idx = pageIdx;
+    if (item) {
+      const itemIdx = data[pageIdx].items.findIndex(it =>
+        it.title.toLowerCase().replace(/\s+/g, '-') === item.toLowerCase()
+      );
+      if (itemIdx !== -1) this.selIdx = itemIdx;
+    } else {
+      this.selIdx = 0;
+    }
     this.render();
+    return true;
+  }
+
+  updateHash() {
+    const pg = data[this.idx];
+    if (!pg.title) { history.replaceState(null, '', window.location.pathname); return; }
+    let hash = pg.title === 'get in touch' ? 'contact' : pg.title.toLowerCase();
+    if (pg.items.length && this.selIdx >= 0) {
+      hash += '/' + data[this.idx].items[this.selIdx].title.toLowerCase().replace(/\s+/g, '-');
+    }
+    history.replaceState(null, '', '#' + hash);
   }
 
   nav(dir) {
     const next = this.idx + dir;
-    if (next >= 0 && next < data.length) { this.idx = next; this.selIdx = 0; this.render(); }
+    if (next >= 0 && next < data.length) { this.idx = next; this.selIdx = 0; this.render(); this.updateHash(); }
   }
 
   render() {
@@ -301,9 +333,9 @@ class TerminalApp {
     this.els.content.innerHTML = `${pg.title ? `<span class="title">${pg.title}</span>` : ''}<div id="type-area" class="desc"></div>${listHtml}${bottomHtml}${btnHtml}`;
 
     this.typeText(pg.desc, document.getElementById('type-area'), () => {
-      if (pg.items.length) { 
+      if (pg.items.length) {
         document.getElementById('list').classList.add('reveal');
-        
+
         // --- SCROLL FIX START ---
         // For "read" (3) and "optimize" (4), scroll only 40px instead of jumping to the first item
         if (this.idx === 3 || this.idx === 4) {
@@ -315,6 +347,7 @@ class TerminalApp {
       }
       if (document.getElementById('act-btn')) document.getElementById('act-btn').classList.add('show');
       if (document.getElementById('btm-txt')) document.getElementById('btm-txt').style.opacity = 1;
+      this.updateHash();
     });
 
     this.els.prog.innerText = `${this.idx + 1} / ${data.length}`;
@@ -355,7 +388,7 @@ class TerminalApp {
   updateSel() {
     document.querySelectorAll('.item').forEach(el => el.classList.remove('active'));
     const el = document.getElementById(`it-${this.selIdx}`);
-    if (el) { el.classList.add('active'); this.scrollToSel(); }
+    if (el) { el.classList.add('active'); this.scrollToSel(); this.updateHash(); }
   }
 
   scrollToSel() {
