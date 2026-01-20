@@ -190,7 +190,20 @@ i prefer:
 <span style="color:var(--accent)">></span> <b>convention</b> over configuration`,
     items: []
   },
-  { title: "build", desc: "i love building things, those that help, even just a little.", items: [], link: "https://github.com/tednguyendev" },
+  {
+    title: "open source",
+    desc: `i love building things, those that help, even just a little.
+
+the following are my open source projects.`,
+    items: [],
+    link: "https://github.com/tednguyendev"
+  },
+  {
+    title: "sites",
+    desc: "i also have some sites.",
+    items: [],
+    link: "https://listz.cc/l/ted-s-3-new-sites"
+  },
   { title: "write", desc: "i also write, mostly about thinking, human connections, efficiency, and rationality.", items: [], link: "https://tednguyen.substack.com/" },
   {
     title: "read",
@@ -322,9 +335,10 @@ class TerminalApp {
     this.els.content.scrollTop = 0;
     this.els.content.className = pg.items.length ? '' : 'centered';
 
-    // Header Highlight
+    // Header Highlight (page idx -> nav span idx)
+    const navMap = [null, 0, 0, 1, 2, 3, 3]; // intro, open source, sites, write, read, optimize, contact
     Array.from(this.els.meta.children).forEach((span, i) => {
-      span.className = (i + 1 === this.idx || this.idx === 5) ? 'active' : '';
+      span.className = (navMap[this.idx] === i) ? 'active' : '';
     });
 
     const listHtml = pg.items.length ? `<ul id="list" class="list">${this.genItems(pg.items)}</ul>` : '';
@@ -338,8 +352,8 @@ class TerminalApp {
         document.getElementById('list').classList.add('reveal');
 
         // --- SCROLL FIX START ---
-        // For "read" (3) and "optimize" (4), scroll only 40px instead of jumping to the first item
-        if (this.idx === 3 || this.idx === 4) {
+        // For "read" (4) and "optimize" (5), scroll only 40px instead of jumping to the first item
+        if (this.idx === 4 || this.idx === 5) {
           setTimeout(() => this.els.content.scrollBy({ top: 52, behavior: 'smooth' }), 100);
         } else {
           setTimeout(() => this.scrollToSel(), 100);
