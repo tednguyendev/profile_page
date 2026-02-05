@@ -200,9 +200,15 @@ the following are my open source projects.`,
   },
   {
     title: "sites",
-    desc: "i also have some sites.",
+    desc: "some sites i have.",
     items: [],
     link: "https://listz.cc/l/ted-s-sites"
+  },
+  {
+    title: "apps",
+    desc: "some macos menu bar apps i built.",
+    items: [],
+    link: "https://listz.cc/l/ted-s-apps"
   },
   { title: "write", desc: "i also write, mostly about thinking, human connections, efficiency, and rationality.", items: [], link: "https://tednguyen.substack.com/" },
   {
@@ -336,7 +342,7 @@ class TerminalApp {
     this.els.content.className = pg.items.length ? '' : 'centered';
 
     // Header Highlight (page idx -> nav span idx)
-    const navMap = [null, 0, 0, 1, 2, 3, 3]; // intro, open source, sites, write, read, optimize, contact
+    const navMap = [null, 0, 0, 0, 1, 2, 3, 3]; // intro, open source, sites, apps, write, read, optimize, contact
     Array.from(this.els.meta.children).forEach((span, i) => {
       span.className = (navMap[this.idx] === i) ? 'active' : '';
     });
@@ -352,8 +358,8 @@ class TerminalApp {
         document.getElementById('list').classList.add('reveal');
 
         // --- SCROLL FIX START ---
-        // For "read" (4) and "optimize" (5), scroll only 40px instead of jumping to the first item
-        if (this.idx === 4 || this.idx === 5) {
+        // For "read" (5) and "optimize" (6), scroll only 40px instead of jumping to the first item
+        if (this.idx === 5 || this.idx === 6) {
           setTimeout(() => this.els.content.scrollBy({ top: 52, behavior: 'smooth' }), 100);
         } else {
           setTimeout(() => this.scrollToSel(), 100);
