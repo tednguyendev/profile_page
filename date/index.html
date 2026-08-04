@@ -240,168 +240,8 @@
   <article id="doc"></article>
 </main>
 
-<script type="text/plain" id="source">
-## what the heck is this
-
-this is dating documentation. it is like a cv for dating, where a person (in this case, me) tells you the necessary information, so that you can quickly scan over and filter me out (if i'm not who you are looking for).
-
-this document isn't here to replace getting to know each other. it's simply a shortcut through the repetitive parts so we can spend more time on the interesting ones.
-
-## about me
-
-hi! i'm ted, and i'm:
-- a straight male
-- 27 years old
-- software engineer
-- living in hcm city
-
-= my big five
-
-big five is ...
-
-you can read more at
-
-![big five](https://en.wikipedia.org/wiki/Big_Five_personality_traits)
-
-if you haven't taken it, i suggest you take it. it only takes 3 minutes:
-
-https://openpsychometrics.org/tests/IPIP-BFFM/
-
-anyway, here is mine:
-
-![big five](../assets/big-five-chart.png)
-
-as you can see, i:
-- have a polarized personality, which means you will either like me or hate me, not in between
-- am a hardcore introvert
-- like discussions/disagreements
-- like to plan! i even plan my death, sorry 💀
-- like new things. new food, coffee places, anything that is new is for me
-
-= i like to read
-
-most of my time is spent on reading. i read mostly about scifi, psychology, epistemology, and all other kinds of things.
-
-the following are my fav authors:
-
-https://tednguyen.me/#read
-
-= i like to write
-
-i also write, mostly about thinking, human connections, efficiency, and rationality:
-
-https://tednguyen.substack.com/
-
-= what talking with me is like
-
-- i do not talk or care about showbiz/celebrities
-- i enjoy talking about ideas/abstractions
-- i like understanding why people think what they think and how they arrived at their conclusions.
-- i am heavily curious, so it is the best if you also enjoy the wonderment of the world as me
-- i like to talk about many topics at the same time
-
-## signs that you are for me
-
-you:
-- read
-- see that life is more than doing what other people are doing, just because that is the way it is
-- are curious about everything and never feel like your current understanding of the world is enough
-- already are, or are in the process of, figuring yourself out
-
-## signs that you are totally not for me
-
-you:
-- do not find yourself in the above section
-- you are religious. no offense, really. it is just not what i am seeking.
-
-## my life goals
-
-my goals are non-specific: i want to learn, read, build, write more fun things.
-
-my non-goals are a lot more specific:
-
-## my non-life-goals
-
-= i do not want kids
-
-it is not that i hate kids. it is just that i do not like kids enough. kids, to me, are just like normal adults.
-
-i am just not willing to make all of the trade-offs
-
-= i do not want to buy real estate in vietnam
-
-it is just that i do not want to play a game where everyone loses but keeps playing because they are afraid of fomo. i prefer stock investments.
-
-= i do not want to buy cars in vietnam
-
-seriously, cars, in this economy, in this city?
-
-[[section-note]]
-
----
-
-i know these are very hard to negotiate, so it is better if we are aware of the differences in goals from the beginning
-
-## more of why i write this
-
-- because it is fun
-- because i find it boring and time consuming to ask and answer the same kinds of questions all the time whenever i meet someone new. although it is true that each encounter is unique in its own way, all conversations still share a couple of specific information exchanges. this is the documentation for them
-
-read more:
-
-https://www.astralcodexten.com/p/in-defense-of-describable-dating
-
-## etc more about me
-
-= oh and i dropped out of university
-
-> hated schools
-> thought that university would be different
-> nah, hated it too
-> dropped out after i felt like i had no direction there
-> started to enjoy learning again
-
-= what i do recently
-- i am trying to limit my social media usage. i used to limit it by 'total time use', but i am starting to see limiting the 'total open times' a day is a much more efficient way
-- i am starting to read about modern philosophers. harder than i thought. but it seems like a fun thing to spend time on
-- i am learning to trek. i have only been on 2 routes, but i feel like this is something i would spend more time on
-- i am starting to join more reading groups and seeing more people. it wasn't as hard as i thought. it feels very natural to be around people who are like you
-
-## some of my random thoughts
-
-= we have too much time
-
-i really think so. 24 hours a day is too much to still be busy. most of the problems i see are because we do not have enough worthy materials to immerse ourselves in.
-
-= travel
-
-i have mixed feelings about traveling. there are times when i travel for months alone and feel like this is the way i should live, and there are months when i just want to stay home and read and write and do everything around my optimized environment (i mean my room)
-
-= spend money
-
-as i said, i mostly read and write, which cost nothing, so my hobbies don't cost much.
-
-other things i spend on are clothes and digital things. i prefer to buy little, but good ones.
-
-i mostly focus on the functionality/portability/durability of the purchases, more than how they look. from phones to ereaders to clothes.
-
-= how am i in groups
-
-you will see me as silent and observant. i only talk when there are statements that i truly believe will bring positive net value to the group. otherwise, i am fine with just listening to the most interesting people in the group
-
-= jomo
-
-i do not have fear of missing out. i have joy of missing out
-
-i find joy in not following what others follow, in having thoughts that others do not have, and in being in experiences that few ever try
-
-i do not think it is because i want to be abnormal. i just do not want to be average. and one cannot avoid that fate if what he thinks and does is common
-
-= i highly value freedom
-</script>
-
 <script>
-const source = document.getElementById('source').textContent.trim();
+const markdownPath = 'content.md';
 const doc = document.getElementById('doc');
 let currentSection = null;
 let currentSectionContainer = null;
@@ -472,6 +312,14 @@ function addParagraph(line) {
   activeContainer().appendChild(p);
 }
 
+function render(source) {
+doc.innerHTML = '';
+currentSection = null;
+currentSectionContainer = null;
+currentContainer = null;
+pendingList = null;
+pendingQuote = null;
+
 source.split('\n').forEach(rawLine => {
   const line = rawLine.trimEnd();
 
@@ -489,16 +337,16 @@ source.split('\n').forEach(rawLine => {
     return;
   }
 
-  if (line.startsWith('= ')) {
+  if (line.startsWith('### ') || line.startsWith('= ')) {
     flushBlocks();
-    const subsection = makeDetails(line.slice(2).trim(), 'subsection');
+    const subsection = makeDetails(line.replace(/^(###|=)\s+/, '').trim(), 'subsection');
     activeContainer();
     currentSectionContainer.appendChild(subsection);
     currentContainer = subsection.querySelector('.content');
     return;
   }
 
-  if (line === '[[section-note]]') {
+  if (line === '[[section-note]]' || line === '<!-- section-note -->') {
     flushBlocks();
     currentContainer = currentSectionContainer;
     return;
@@ -536,6 +384,17 @@ source.split('\n').forEach(rawLine => {
 
   addParagraph(line.trim());
 });
+}
+
+fetch(markdownPath)
+  .then(response => {
+    if (!response.ok) throw new Error(`failed to load ${markdownPath}`);
+    return response.text();
+  })
+  .then(source => render(source.trim()))
+  .catch(error => {
+    doc.innerHTML = `<p>${escapeHtml(error.message)}</p>`;
+  });
 
 document.getElementById('expand-all').addEventListener('click', () => {
   document.querySelectorAll('details').forEach(detail => detail.open = true);
