@@ -41,37 +41,40 @@
   ::-webkit-scrollbar-thumb:hover { background: var(--accent); border-color: #fff; }
 
   .page {
-    width: min(900px, calc(100% - 28px));
-    margin: 28px auto;
-    padding: 24px;
+    width: min(1160px, calc(100% - 26px));
+    margin: 18px auto;
+    padding: 0;
     background: var(--panel);
-    border: 2px solid var(--border);
-    box-shadow: 10px 10px 0 var(--shadow);
+    border: 1px solid var(--border);
+    box-shadow: 12px 12px 0 var(--shadow);
+    display: grid;
+    grid-template-columns: 300px 1fr;
   }
 
   header {
-    display: flex;
-    justify-content: space-between;
-    gap: 18px;
-    align-items: flex-start;
-    padding-bottom: 18px;
-    border-bottom: 2px dashed var(--border);
-    margin-bottom: 18px;
+    display: block;
+    min-height: calc(100vh - 36px);
+    padding: 28px;
+    border-right: 1px solid var(--border);
+    background: #181d1b;
+    position: sticky;
+    top: 0;
+    align-self: start;
   }
 
   h1 {
     margin: 0;
     color: var(--accent);
-    font-size: clamp(22px, 5vw, 42px);
+    font-size: 34px;
     line-height: 1.05;
     text-transform: lowercase;
   }
 
   .nav {
-    display: flex;
     gap: 10px;
-    flex-wrap: wrap;
-    justify-content: flex-end;
+    display: grid;
+    justify-content: stretch;
+    margin-top: 18px;
   }
 
   button {
@@ -98,10 +101,15 @@
     color: var(--muted);
   }
 
+  #doc {
+    min-width: 0;
+    padding: 24px;
+  }
+
   details {
     background: rgba(0, 0, 0, 0.16);
-    border: 1px solid #3b3b45;
-    border-left: 4px solid #3b3b45;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
     margin: 10px 0;
   }
 
@@ -123,14 +131,14 @@
   summary::-webkit-details-marker { display: none; }
 
   summary::before {
-    content: "+";
+    content: "○";
     color: var(--accent);
     display: inline-block;
     margin-right: 10px;
     width: 16px;
   }
 
-  details[open] > summary::before { content: "-"; }
+  details[open] > summary::before { content: "●"; }
 
   summary:focus-visible {
     outline: 2px solid var(--accent);
@@ -143,6 +151,7 @@
 
   .subsection {
     background: var(--panel-2);
+    margin-left: 24px;
     margin-top: 14px;
   }
 
@@ -169,8 +178,10 @@
     max-width: min(100%, 720px);
     height: auto;
     margin: 14px 0;
-    border: 1px solid #444;
-    background: #000;
+    border: 1px solid #333;
+    background: #f5f5f5;
+    filter: brightness(0.96);
+    padding: 8px;
   }
 
   blockquote {
@@ -188,23 +199,36 @@
 
   @media (max-width: 640px) {
     .page {
+      display: block;
       width: calc(100% - 18px);
       margin: 9px auto;
-      padding: 16px;
-      box-shadow: 5px 5px 0 var(--shadow);
+      box-shadow: 6px 6px 0 var(--shadow);
     }
 
     header {
-      display: block;
+      min-height: 0;
+      position: static;
+      border-right: 0;
+      border-bottom: 1px solid var(--border);
+      padding: 18px;
     }
 
     .nav {
+      display: flex;
       justify-content: flex-start;
       margin-top: 14px;
     }
 
+    #doc {
+      padding: 16px;
+    }
+
     .content {
       padding-left: 20px;
+    }
+
+    .subsection {
+      margin-left: 0;
     }
   }
 </style>
@@ -214,11 +238,11 @@
   <header>
     <div>
       <h1>date ted doc</h1>
-      <p class="intro">folded by default. open whatever seems relevant.</p>
     </div>
     <nav class="nav" aria-label="Page controls">
       <button type="button" id="expand-all">expand all</button>
       <button type="button" id="fold-all">fold all</button>
+      <button type="button" id="to-top">to top</button>
     </nav>
   </header>
   <article id="doc"></article>
@@ -227,7 +251,7 @@
 <script type="text/plain" id="source">
 ## what the heck is this
 
-This is a dating documentation, which is like a CV for dating, where a person (in this case, me) will tell you about the nessessary information, so that you can quickly scan over and filter me out (if I'm not who you are looking for).
+This is dating documentation, which is like a CV for dating, where a person (in this case, me) will tell you about the necessary information, so that you can quickly scan over and filter me out (if I'm not who you are looking for).
 
 This document isn't here to replace getting to know each other. It's simply a shortcut through the repetitive parts so we can spend more time on the interesting ones.
 
@@ -247,7 +271,7 @@ you can read more at
 
 ![big five](https://en.wikipedia.org/wiki/Big_Five_personality_traits)
 
-if you haven't taken it, i suggest you to. it only take 3 minutes:
+if you haven't taken it, i suggest you take it. it only takes 3 minutes:
 
 https://openpsychometrics.org/tests/IPIP-BFFM/
 
@@ -289,14 +313,14 @@ https://tednguyen.substack.com/
 you:
 - read
 - see that life is more about doing what other people are doing, just because that is the way it is
-- are curious about everything things and never feel enough with your current understandings about the world
-- already or in the process of figurating yourself out
+- are curious about everything and never feel like your current understanding of the world is enough
+- already are, or are in the process of, figuring yourself out
 
 ## signs that you are TOTALLY not for me
 
 you:
-- do not find yourself in the above session
-- you are religous. no offense, really. it is just not what i am seeking.
+- do not find yourself in the above section
+- you are religious. no offense, really. it is just not what i am seeking.
 
 ## my life goals
 
@@ -310,15 +334,17 @@ my non-goals are a lot more specific:
 
 it is not that i hate kids. it is just that i do not like kids enough. kids, to me, are just like normal adults.
 
-i am just not willing for all of the trade offs
+i am just not willing to make all of the trade-offs
 
-= i do not want to buy real estates in Vietnam
+= i do not want to buy real estate in Vietnam
 
-it is just that i do not want to play a game where everyone loses but keep playing cause afraid of fomo. i prefer stocks investments
+it is just that i do not want to play a game where everyone loses but keeps playing because they are afraid of fomo. i prefer stock investments
 
 = i do not want to buy cars in Vietnam
 
 seriously, cars, in this economy, in this city?
+
+[[section-note]]
 
 ---
 
@@ -338,32 +364,46 @@ https://www.astralcodexten.com/p/in-defense-of-describable-dating
 = oh and i dropped out of university
 
 > hated schools
-> thought that university would be differently
+> thought that university would be different
 > nah, hated it too
 > dropped out after i feel like i have no direction here
 > started to enjoy learning again
 
 = what i do recently
-- i am trying to limit my social media usages. i used to limit it by 'total time use', but i am starting to see limiting the 'total open times' a day is a much more efficient way
+- i am trying to limit my social media usage. i used to limit it by 'total time use', but i am starting to see limiting the 'total open times' a day is a much more efficient way
 - i am starting to read about modern philosophers. harder than i thought. but it seems like a fun thing to spend time on
 - i am learning to trek. i am only on 2 routes, but i feel like this is something i would spend more time on
-- i am starting to join more reading groups and seeing more people. it wasnt as hard as I thought. it feel very natural to be around the people that are like you
+- i am starting to join more reading groups and seeing more people. it wasn't as hard as i thought. it feels very natural to be around people who are like you
 
 ## some of my random thoughts
 
 = we have too much time
 
-i really think so. 24 hours a day is too much to still be busy about it. most of the problems i see we have is because we do not have enough worthy materials to immerse ourselve in.
+i really think so. 24 hours a day is too much to still be busy about it. most of the problems i see we have are because we do not have enough worthy materials to immerse ourselves in.
 
 = travel
 
-i have a mixed feelings for traveling. there are times where i travel months alone and feel like this is the way i should live, and there are months where i just want to stay home and read and write and do everything around my optimized environment (i mean my room)
+i have mixed feelings about traveling. there are times where i travel months alone and feel like this is the way i should live, and there are months where i just want to stay home and read and write and do everything around my optimized environment (i mean my room)
 
 = spend money
 
+as i said, i mostly read and write, which cost nothing, so my hobbies don't cost much.
+
+other things i spend on are clothes and digital things. i prefer to buy little, but good ones.
+
+i mostly focus on the functionality/portability/durability of the purchases, more than how they look. from phones, ereaders, clothes.
+
 = how am i in groups
 
+you will see me as silent and observant. i only talk when there are statements that i truly believe will bring a positive net value for the group. or else, i am fine with just listening to the most interesting people in the group
+
 = jomo
+
+i do not have fear of missing out, i have joy of missing out
+
+i find the joy in not following what others follow, in having thoughts that others do not have, in being in experiences that few ever try
+
+i do not think it is because i want to be abnormal. i just do not want to be average. and one can not avoid that fate if what he thinks and does is common
 
 = i highly value freedom
 </script>
@@ -466,6 +506,12 @@ source.split('\n').forEach(rawLine => {
     return;
   }
 
+  if (line === '[[section-note]]') {
+    flushBlocks();
+    currentContainer = currentSectionContainer;
+    return;
+  }
+
   if (line === '---') {
     flushBlocks();
     activeContainer().appendChild(document.createElement('hr'));
@@ -505,6 +551,10 @@ document.getElementById('expand-all').addEventListener('click', () => {
 
 document.getElementById('fold-all').addEventListener('click', () => {
   document.querySelectorAll('details').forEach(detail => detail.open = false);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+document.getElementById('to-top').addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 </script>
