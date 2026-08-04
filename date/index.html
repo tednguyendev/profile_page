@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Ted Nguyen date doc">
+<title>date doc - ted nguyen</title>
+<link rel="icon" type="image/png" href="../ted.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #111;
+    --panel: #202028;
+    --panel-2: #17171d;
+    --border: #555;
+    --text: #eee;
+    --muted: #aaa;
+    --dim: #777;
+    --accent: #66db82;
+    --gold: #f0e68c;
+    --shadow: #000;
+    --font: 'Space Mono', monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  ::-webkit-scrollbar { width: 12px; background: var(--panel); border-left: 1px solid #333; }
+  ::-webkit-scrollbar-thumb { background: #333; border: 1px solid var(--dim); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); border-color: #fff; }
+
+  .page {
+    width: min(900px, calc(100% - 28px));
+    margin: 28px auto;
+    padding: 24px;
+    background: var(--panel);
+    border: 2px solid var(--border);
+    box-shadow: 10px 10px 0 var(--shadow);
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    align-items: flex-start;
+    padding-bottom: 18px;
+    border-bottom: 2px dashed var(--border);
+    margin-bottom: 18px;
+  }
+
+  h1 {
+    margin: 0;
+    color: var(--accent);
+    font-size: clamp(22px, 5vw, 42px);
+    line-height: 1.05;
+    text-transform: lowercase;
+  }
+
+  .nav {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  button, .home {
+    appearance: none;
+    background: transparent;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    cursor: pointer;
+    font: 700 13px var(--font);
+    padding: 8px 11px;
+    text-decoration: none;
+  }
+
+  button:hover, .home:hover,
+  button:focus-visible, .home:focus-visible {
+    background: var(--accent);
+    color: #000;
+    outline: none;
+    box-shadow: 0 0 10px rgba(102, 219, 130, 0.45);
+  }
+
+  .intro {
+    margin: 0 0 18px;
+    color: var(--muted);
+  }
+
+  details {
+    background: rgba(0, 0, 0, 0.16);
+    border: 1px solid #3b3b45;
+    border-left: 4px solid #3b3b45;
+    margin: 10px 0;
+  }
+
+  details[open] {
+    border-color: var(--accent);
+    border-left-color: var(--accent);
+    background: rgba(102, 219, 130, 0.07);
+  }
+
+  summary {
+    cursor: pointer;
+    color: var(--gold);
+    font-weight: 700;
+    list-style: none;
+    padding: 13px 15px;
+    position: relative;
+  }
+
+  summary::-webkit-details-marker { display: none; }
+
+  summary::before {
+    content: "+";
+    color: var(--accent);
+    display: inline-block;
+    margin-right: 10px;
+    width: 16px;
+  }
+
+  details[open] > summary::before { content: "-"; }
+
+  summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .content {
+    padding: 0 18px 18px 41px;
+  }
+
+  .subsection {
+    background: var(--panel-2);
+    margin-top: 14px;
+  }
+
+  .subsection > summary {
+    color: var(--text);
+    font-size: 15px;
+    padding: 10px 13px;
+  }
+
+  p { margin: 12px 0; color: #d7d7d7; }
+  ul { margin: 10px 0 14px; padding-left: 22px; }
+  li { margin: 5px 0; }
+
+  a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(102, 219, 130, 0.65);
+  }
+
+  a:hover { border-bottom-style: solid; }
+
+  img {
+    display: block;
+    max-width: min(100%, 720px);
+    height: auto;
+    margin: 14px 0;
+    border: 1px solid #444;
+    background: #000;
+  }
+
+  blockquote {
+    margin: 12px 0;
+    padding: 2px 0 2px 16px;
+    border-left: 3px solid var(--accent);
+    color: var(--muted);
+  }
+
+  hr {
+    border: 0;
+    border-top: 2px dashed var(--border);
+    margin: 18px 0;
+  }
+
+  @media (max-width: 640px) {
+    .page {
+      width: calc(100% - 18px);
+      margin: 9px auto;
+      padding: 16px;
+      box-shadow: 5px 5px 0 var(--shadow);
+    }
+
+    header {
+      display: block;
+    }
+
+    .nav {
+      justify-content: flex-start;
+      margin-top: 14px;
+    }
+
+    .content {
+      padding-left: 20px;
+    }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <header>
+    <div>
+      <h1>date doc</h1>
+      <p class="intro">folded by default. open whatever seems relevant.</p>
+    </div>
+    <nav class="nav" aria-label="Page controls">
+      <a class="home" href="../">home</a>
+      <button type="button" id="expand-all">expand all</button>
+      <button type="button" id="fold-all">fold all</button>
+    </nav>
+  </header>
+  <article id="doc"></article>
+</main>
+
+<script type="text/plain" id="source">
+## what the heck is this
+
+This is a dating documentation, which is like a CV for dating, where a person (in this case, me) will tell you about the nessessary information, so that you can quickly scan over and filter me out (if I'm not who you are looking for).
+
+This document isn't here to replace getting to know each other. It's simply a shortcut through the repetitive parts so we can spend more time on the interesting ones.
+
+## about me
+
+Hi! I'm Ted, and I'm:
+- a straight male
+- 27 years old
+- software engineer
+- living in hcm city
+
+= my big five
+
+big five is ...
+
+you can read more at
+
+![big five](https://en.wikipedia.org/wiki/Big_Five_personality_traits)
+
+if you haven't taken it, i suggest you to. it only take 3 minutes:
+
+https://openpsychometrics.org/tests/IPIP-BFFM/
+
+anyway, here is mine:
+
+![big five](../assets/20260804-093139.png)
+
+as you can see, I:
+- have a polarized personality. which means you will either like me or hate me, not in between
+- am a hardcore introvert
+- like discussions/disagreements
+- like to plan! i even plan my death, sorry 💀
+- like new things. new food, coffee places, anything that is new is for me
+
+= i like to read
+
+most of my time are spent on reading. i read mostly about scifi, psychology, epistemology, and all other kinds of things.
+
+the following are my fav authors:
+
+https://tednguyen.me/#read
+
+= i like to write
+
+i also write, mostly about thinking, human connections, efficiency, and rationality:
+
+https://tednguyen.substack.com/
+
+= what talking with me be like
+
+- i do not talk or care about showbiz/celebrities
+- i enjoy talking about ideas/abstractions
+- i like understanding why people think what they think and how they arrived at their conclusions.
+- i am heavily curious, so it is the best if you also enjoy the wonderment of the world as me
+- i like to talk about many topics at the same time
+
+## signs that you are for me
+
+you:
+- read
+- see that life is more about doing what other people are doing, just because that is the way it is
+- are curious about everything things and never feel enough with your current understandings about the world
+- already or in the process of figurating yourself out
+
+## signs that you are TOTALLY not for me
+
+you:
+- do not find yourself in the above session
+- you are religous. no offense, really. it is just not what i am seeking.
+
+## my life goals
+
+my goals are non-specific: i want to learn, read, build, write more fun things.
+
+my non-goals are a lot more specific:
+
+## my non-life-goals
+
+= i do not want kids
+
+it is not that i hate kids. it is just that i do not like kids enough. kids, to me, are just like normal adults.
+
+i am just not willing for all of the trade offs
+
+= i do not want to buy real estates in Vietnam
+
+it is just that i do not want to play a game where everyone loses but keep playing cause afraid of fomo. i prefer stocks investments
+
+= i do not want to buy cars in Vietnam
+
+seriously, cars, in this economy, in this city?
+
+---
+
+i know these are very hard to negotiate, so it is better if we are just aware of the differences in goals from the beginning
+
+## more of why I write this
+
+- because it is fun
+- because i find it boring and time consuming to asking and answering the same kinds of questions all the time whenever I meet someone new. although it is true that each encounter is unique on its own way, all conversations will still share a couple of specific information exchange. This is the documentation for them
+
+read more:
+
+https://www.astralcodexten.com/p/in-defense-of-describable-dating
+
+## etc more about me
+
+= oh and i dropped out of university
+
+> hated schools
+> thought that university would be differently
+> nah, hated it too
+> dropped out after i feel like i have no direction here
+> started to enjoy learning again
+
+= what i do recently
+- i am trying to limit my social media usages. i used to limit it by 'total time use', but i am starting to see limiting the 'total open times' a day is a much more efficient way
+- i am starting to read about modern philosophers. harder than i thought. but it seems like a fun thing to spend time on
+- i am learning to trek. i am only on 2 routes, but i feel like this is something i would spend more time on
+- i am starting to join more reading groups and seeing more people. it wasnt as hard as I thought. it feel very natural to be around the people that are like you
+
+## some of my random thoughts
+
+= we have too much time
+
+i really think so. 24 hours a day is too much to still be busy about it. most of the problems i see we have is because we do not have enough worthy materials to immerse ourselve in.
+
+= travel
+
+i have a mixed feelings for traveling. there are times where i travel months alone and feel like this is the way i should live, and there are months where i just want to stay home and read and write and do everything around my optimized environment (i mean my room)
+
+= spend money
+
+= how am i in groups
+
+= jomo
+
+= i highly value freedom
+</script>
+
+<script>
+const source = document.getElementById('source').textContent.trim();
+const doc = document.getElementById('doc');
+let currentSection = null;
+let currentSectionContainer = null;
+let currentContainer = null;
+let pendingList = null;
+let pendingQuote = null;
+
+function escapeHtml(value) {
+  return value.replace(/[&<>"']/g, char => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[char]));
+}
+
+function inlineMarkup(value) {
+  return escapeHtml(value).replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+}
+
+function flushBlocks() {
+  pendingList = null;
+  pendingQuote = null;
+}
+
+function activeContainer() {
+  if (!currentContainer) {
+    currentSection = makeDetails('notes', 'section');
+    doc.appendChild(currentSection);
+    currentSectionContainer = currentSection.querySelector('.content');
+    currentContainer = currentSectionContainer;
+  }
+  return currentContainer;
+}
+
+function makeDetails(title, className) {
+  const details = document.createElement('details');
+  details.className = className;
+  const summary = document.createElement('summary');
+  summary.textContent = title;
+  const content = document.createElement('div');
+  content.className = 'content';
+  details.append(summary, content);
+  return details;
+}
+
+function addParagraph(line) {
+  flushBlocks();
+  const image = line.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+  if (image) {
+    const [, alt, src] = image;
+    if (/\.(png|jpe?g|gif|webp|avif|svg)(\?.*)?$/i.test(src)) {
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = alt || '';
+      activeContainer().appendChild(img);
+    } else {
+      const p = document.createElement('p');
+      p.innerHTML = `<a href="${escapeHtml(src)}" target="_blank" rel="noopener">${escapeHtml(alt || src)}</a>`;
+      activeContainer().appendChild(p);
+    }
+    return;
+  }
+
+  const p = document.createElement('p');
+  p.innerHTML = inlineMarkup(line);
+  activeContainer().appendChild(p);
+}
+
+source.split('\n').forEach(rawLine => {
+  const line = rawLine.trimEnd();
+
+  if (!line.trim()) {
+    flushBlocks();
+    return;
+  }
+
+  if (line.startsWith('## ')) {
+    flushBlocks();
+    currentSection = makeDetails(line.slice(3).trim(), 'section');
+    doc.appendChild(currentSection);
+    currentSectionContainer = currentSection.querySelector('.content');
+    currentContainer = currentSectionContainer;
+    return;
+  }
+
+  if (line.startsWith('= ')) {
+    flushBlocks();
+    const subsection = makeDetails(line.slice(2).trim(), 'subsection');
+    activeContainer();
+    currentSectionContainer.appendChild(subsection);
+    currentContainer = subsection.querySelector('.content');
+    return;
+  }
+
+  if (line === '---') {
+    flushBlocks();
+    activeContainer().appendChild(document.createElement('hr'));
+    return;
+  }
+
+  if (line.startsWith('- ')) {
+    pendingQuote = null;
+    if (!pendingList) {
+      pendingList = document.createElement('ul');
+      activeContainer().appendChild(pendingList);
+    }
+    const li = document.createElement('li');
+    li.innerHTML = inlineMarkup(line.slice(2).trim());
+    pendingList.appendChild(li);
+    return;
+  }
+
+  if (line.startsWith('> ')) {
+    pendingList = null;
+    if (!pendingQuote) {
+      pendingQuote = document.createElement('blockquote');
+      activeContainer().appendChild(pendingQuote);
+    }
+    const p = document.createElement('p');
+    p.innerHTML = inlineMarkup(line.slice(2).trim());
+    pendingQuote.appendChild(p);
+    return;
+  }
+
+  addParagraph(line.trim());
+});
+
+document.getElementById('expand-all').addEventListener('click', () => {
+  document.querySelectorAll('details').forEach(detail => detail.open = true);
+});
+
+document.getElementById('fold-all').addEventListener('click', () => {
+  document.querySelectorAll('details').forEach(detail => detail.open = false);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>
