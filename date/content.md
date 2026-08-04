@@ -28,7 +28,7 @@ as you can see, i:
 
 - am a hardcore introvert
 
-- like discussions/disagreements
+- like discussions and feel okay with disagreements
 
 - like to plan! i even plan my death 💀
 
