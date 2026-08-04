@@ -90,7 +90,7 @@ my non-goals are a lot more specific:
 
 ### i do not want kids
 
-it is not that i hate kids. it is just that i do not like kids enough to make the trade-offs. to me, kids are just like people from the other ages
+it is not that i hate kids. it is just that i do not like kids enough to make the trade-offs. to me, kids are just people at a different stage of life
 
 ### i do not want to buy real estate in vietnam
 
@@ -110,21 +110,13 @@ i know these are very hard to negotiate, so it is better if we are aware of the 
 
 - because it is fun
 
-- because i find it boring and time-consuming to keep asking and answering the same kinds of questions every time. although each encounter is unique in its own way, they still share a set of specific information exchanges. this is documentation for them
+- because i find it boring and time-consuming to keep asking and answering the same kinds of questions every time
 
 read more:
 
 https://www.astralcodexten.com/p/in-defense-of-describable-dating
 
-## etc more about me
-
-### oh and i dropped out of university
-
-i loved learning in elementary school, when the things i studied felt tangible and made sense to me.
-
-by the time i reached middle school, i no longer saw the point, so i lost interest.
-
-quitting university and realizing that i could make learning fun all by myself was one of the defining milestones in my life.
+## more about me
 
 ### what i do recently
 
@@ -135,8 +127,6 @@ quitting university and realizing that i could make learning fun all by myself w
 - i am learning to trek. i have only been on 2 routes, but i feel like this is something i will spend more time on
 
 - i am starting to join more reading groups and seeing more people. it wasn’t as hard as i thought. it feels very natural to be around people who are like you
-
-## some of my random thoughts
 
 ### travel
 
@@ -154,3 +144,10 @@ i focus on the functionality/portability/durability of purchases, more than how 
 
 you will see me as silent and observant. i only talk when there are statements that i truly believe will bring positive net value to the group. otherwise, i am fine with just listening to the most interesting people in the group
 
+### oh and i dropped out of university
+
+i loved learning in elementary school, when the things i studied felt tangible and made sense to me
+
+by the time i reached middle school, i no longer saw the point, so i lost interest
+
+quitting university and realizing that i could make learning fun all by myself was one of the defining milestones in my life
