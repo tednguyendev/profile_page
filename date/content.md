@@ -128,17 +128,15 @@ https://www.astralcodexten.com/p/in-defense-of-describable-dating
 
 - i am starting to join more reading groups and seeing more people. it wasn’t as hard as i thought. it feels very natural to be around people who are like you
 
-### travel
+### my relationship with traveling
 
 i have mixed feelings for traveling. there are times when i solo travel for months and feel like this is the way i should live, and there are also months when i love staying at home and read and write and do everything around my optimized environment (i mean my room)
 
-### spend money
+### how i spend
 
-as i said, i mostly read and write, which cost nothing, so my hobbies don’t cost much
+since i mostly read and write, my hobbies don’t cost much
 
-other things i spend money on are clothes and digital things. i prefer to buy little, but good ones
-
-i focus on the functionality/portability/durability of purchases, more than how nice they look or how cool they are. from phones to e-readers to clothes
+for those that i spend, like clothes or digital devices, i prefer to buy little but good ones. i focus on the functionality/portability/durability of them more than how nice they look or how cool they are
 
 ### how am i in groups
 
