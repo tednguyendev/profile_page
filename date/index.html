@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="ted nguyen date ted doc">
 <title>date ted doc</title>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-H0QLVMEDVT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-H0QLVMEDVT', {
+    page_title: 'date ted doc',
+    page_path: '/date/'
+  });
+</script>
 <link rel="icon" type="image/png" href="../ted.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -249,6 +260,14 @@ let currentContainer = null;
 let pendingList = null;
 let pendingQuote = null;
 
+function track(eventName, params = {}) {
+  if (typeof gtag !== 'function') return;
+  gtag('event', eventName, {
+    page_name: 'date',
+    ...params
+  });
+}
+
 function escapeHtml(value) {
   return value.replace(/[&<>"']/g, char => ({
     '&': '&amp;',
@@ -281,6 +300,8 @@ function activeContainer() {
 function makeDetails(title, className) {
   const details = document.createElement('details');
   details.className = className;
+  details.dataset.title = title;
+  details.dataset.kind = className;
   const summary = document.createElement('summary');
   summary.textContent = title;
   const content = document.createElement('div');
@@ -397,16 +418,40 @@ fetch(markdownPath)
   });
 
 document.getElementById('expand-all').addEventListener('click', () => {
+  track('date_control_click', { control_name: 'expand_all' });
   document.querySelectorAll('details').forEach(detail => detail.open = true);
 });
 
 document.getElementById('fold-all').addEventListener('click', () => {
+  track('date_control_click', { control_name: 'fold_all' });
   document.querySelectorAll('details').forEach(detail => detail.open = false);
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
 document.getElementById('to-top').addEventListener('click', () => {
+  track('date_control_click', { control_name: 'to_top' });
   window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+doc.addEventListener('click', event => {
+  const summary = event.target.closest('summary');
+  if (summary && doc.contains(summary)) {
+    const detail = summary.parentElement;
+    track('date_section_toggle', {
+      section_title: detail.dataset.title || summary.textContent.trim(),
+      section_kind: detail.dataset.kind || 'details',
+      toggle_state: detail.open ? 'close' : 'open'
+    });
+    return;
+  }
+
+  const link = event.target.closest('a[href]');
+  if (link && doc.contains(link)) {
+    track('date_link_click', {
+      link_text: link.textContent.trim().slice(0, 100),
+      link_url: link.href
+    });
+  }
 });
 </script>
 </body>
