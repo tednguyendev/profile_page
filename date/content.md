@@ -78,7 +78,7 @@ you:
 
 - do not find yourself in the above section
 
-- you are religious. no offense, really. it is just not what i am seeking
+- you are catholic. no offense, really. it is just not what i am seeking
 
 ## my life goals
 
