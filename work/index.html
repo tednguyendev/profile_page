@@ -185,11 +185,17 @@ function activeContainer() {
   return currentContainer;
 }
 
+function slug(title) {
+  return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
 function makeSection(title, className) {
   const section = document.createElement('section');
   section.className = className;
+  section.id = slug(title);
   const heading = document.createElement(className === 'subsection' ? 'h3' : 'h2');
   heading.textContent = title;
+  heading.id = slug(title);
   const content = document.createElement('div');
   content.className = 'content';
   section.append(heading, content);
