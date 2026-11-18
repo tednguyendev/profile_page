@@ -189,13 +189,18 @@ function slug(title) {
   return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 }
 
+function headingLabel(title) {
+  const match = title.match(/^\[([^\]]+)\]\(([^)\s]+)\)$/);
+  return match ? match[1] : title;
+}
+
 function makeSection(title, className) {
   const section = document.createElement('section');
   section.className = className;
-  section.id = slug(title);
+  section.id = slug(headingLabel(title));
   const heading = document.createElement(className === 'subsection' ? 'h3' : 'h2');
-  heading.textContent = title;
-  heading.id = slug(title);
+  heading.innerHTML = inlineMarkup(title);
+  heading.id = slug(headingLabel(title));
   const content = document.createElement('div');
   content.className = 'content';
   section.append(heading, content);
