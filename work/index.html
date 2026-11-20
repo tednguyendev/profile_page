@@ -316,13 +316,50 @@ fetch(markdownPath)
 
 doc.addEventListener('click', event => {
   const link = event.target.closest('a[href]');
-  if (link && doc.contains(link)) {
-    track('work_link_click', {
-      link_text: link.textContent.trim().slice(0, 100),
-      link_url: link.href
-    });
-  }
+  if (!link || !doc.contains(link)) return;
+  const url = link.href;
+  track('work_link_click', {
+    link_text: link.textContent.trim().slice(0, 100),
+    link_url: url,
+    link_kind: url.startsWith('mailto:') ? 'email' : 'outbound'
+  });
 });
+
+const scrollMarks = [25, 50, 75, 90, 100];
+const seenScroll = new Set();
+
+function scrollPercent() {
+  const height = document.documentElement.scrollHeight - window.innerHeight;
+  if (height <= 0) return 100;
+  return Math.min(100, Math.round((window.scrollY / height) * 100));
+}
+
+function trackScroll() {
+  const percent = scrollPercent();
+  scrollMarks.forEach(mark => {
+    if (percent < mark || seenScroll.has(mark)) return;
+    seenScroll.add(mark);
+    track('scroll', { percent_scrolled: mark });
+  });
+}
+
+window.addEventListener('scroll', trackScroll, { passive: true });
+
+const seenSections = new Set();
+const sectionObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const id = entry.target.id;
+    if (!id || seenSections.has(id)) return;
+    seenSections.add(id);
+    track('section_view', { section_id: id });
+  });
+}, { threshold: 0.4 });
+
+new MutationObserver(() => {
+  doc.querySelectorAll('section[id]').forEach(section => sectionObserver.observe(section));
+  trackScroll();
+}).observe(doc, { childList: true, subtree: true });
 </script>
 </body>
 </html>
