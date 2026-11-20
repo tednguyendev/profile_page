@@ -1,6 +1,6 @@
 ## intro
 
-hi, i am ted, currently a software developer.
+hi, i am ted, a fullstack developer.
 
 ## open source
 
@@ -34,33 +34,41 @@ there is no other form of knowledge consumption that offers the same combination
 
 the following are those i read the most from.
 
-### [Tim Urban](https://waitbutwhy.com)
-
-my most fav writer. he writes (and draws stick humans) about, well, everything.
-
 ### [Paul Graham](https://www.paulgraham.com/articles.html)
 
 he writes about writing, thinking, and building. his writings never fail to inspire me to make something great, even just for myself.
-
-### [Scott Alexander](https://www.astralcodexten.com)
-
-i discovered scott alexander through less wrong, a rationality community. i then found myself reading everything else he writes.
-
-### [Henrik Karlsson](https://www.henrikkarlsson.xyz/)
-
-he writes thoughtful essays about learning, attention, relationships, and how to live with more depth.
 
 ### [DHH and Jason Fried](https://37signals.com/)
 
 the two founders of 37signals have a lot of opinions on a lot of things, and i like to observe those who have opinions and fight for them, rather than those who don't.
 
+### [Scott Alexander](https://www.astralcodexten.com)
+
+i discovered scott alexander through lesswrong, a rationality community. i then found myself reading everything else he writes.
+
+### [Henrik Karlsson](https://www.henrikkarlsson.xyz/)
+
+he writes thoughtful essays about learning, attention, relationships, and how to live with more depth.
+
 ### [Nassim Taleb](https://x.com/nntaleb)
 
 he wrote the incerto, which covers a lot of unique interesting topics.
 
+### [Tim Urban](https://waitbutwhy.com)
+
+my most fav writer. he writes (and draws stick humans) about, well, everything.
+
 ### [Ted Chiang](https://www.goodreads.com/author/list/130698.Ted_Chiang)
 
 my most fav sci-fi writer. his sci-fi doesn't feel far-fetched. it feels close. it makes you think a lot, while still being enjoyable.
+
+## etc
+
+some facts about me:
+
+- i use neovim
+- i use a split keyboard
+- i read a lot about [epistemology](https://en.wikipedia.org/wiki/Epistemology), especially [lesswrong](https://www.lesswrong.com/)
 
 ## get in touch
 
